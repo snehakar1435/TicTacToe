@@ -1,8 +1,9 @@
 // TicTacToe
-// UC2 performs a random toss to decide who plays first and assigns
-// symbols (X or O) to the human and computer accordingly.
+// UC3 reads a slot number (1-9) entered by the user. This use case
+// focuses only on input handling without validation.
 
 import java.util.Random;
+import java.util.Scanner;
 
 public class TicTacToe {
 
@@ -14,15 +15,21 @@ public class TicTacToe {
     static char humanSymbol;
     static char computerSymbol;
 
+    // UC3 - Scanner for user input
+    static Scanner scanner = new Scanner(System.in);
+
     /**
-     * Entry point of the program. Executes the toss logic and displays
-     * the result of turn and symbol assignment.
+     * Entry point of the program. Reads slot input and prints it back
+     * to verify correct user input handling.
      */
     public static void main(String[] args) {
         initializeBoard();
         printBoard();
         tossAndAssignSymbols();
         displayTossResult();
+
+        int slot = getUserSlot();
+        System.out.println("Slot entered: " + slot);
     }
 
     /**
@@ -59,7 +66,7 @@ public class TicTacToe {
      */
     static void tossAndAssignSymbols() {
         Random random = new Random();
-        int toss = random.nextInt(2); // generates 0 or 1
+        int toss = random.nextInt(2);
 
         if (toss == 0) {
             isHumanTurn = true;
@@ -85,5 +92,17 @@ public class TicTacToe {
         }
         System.out.println("Your symbol   : " + humanSymbol);
         System.out.println("Computer symbol: " + computerSymbol);
+    }
+
+    /**
+     * Reads an integer slot value from the user.
+     * Input: Scanner object
+     * Output: Slot number (1-9)
+     * Hint: Validation will be added in later use cases.
+     */
+    static int getUserSlot() {
+        System.out.print("\nEnter slot number (1-9): ");
+        int slot = scanner.nextInt();
+        return slot;
     }
 }
