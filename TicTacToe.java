@@ -1,6 +1,6 @@
 // TicTacToe
-// UC6 places a player's symbol on the board at the given position.
-// This use case focuses on updating game state.
+// UC7 allows the computer to make a random valid move
+// by reusing slot conversion and validation logic.
 
 import java.util.Random;
 import java.util.Scanner;
@@ -17,14 +17,13 @@ public class TicTacToe {
     // UC2 variables
     static boolean isHumanTurn;
     static char humanSymbol;
-    static char computerSymbol;
+    static char computerSymbol = 'O';
 
     // UC3 - Scanner for user input
     static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Entry point of the program. Places a sample move
-     * and prints the updated cell value.
+     * Entry point of the program. Triggers the computer move.
      */
     public static void main(String[] args) {
         initializeBoard();
@@ -47,6 +46,11 @@ public class TicTacToe {
         } else {
             System.out.println("Invalid move!");
         }
+
+        System.out.println("\nComputer is making a move...");
+        computerMove();
+        System.out.println("\nBoard after computer's move:");
+        printBoard();
     }
 
     /**
@@ -163,9 +167,26 @@ public class TicTacToe {
      * Updates the board by placing the given symbol at
      * the specified row and column.
      * Input: Row, Column, Symbol
-     * Hint: Assume the move is already validated.
      */
     static void placeMove(int row, int col, char symbol) {
         board[row][col] = symbol;
+    }
+
+    /**
+     * Generates random slot values until a valid move is found,
+     * then places the computer symbol on the board.
+     */
+    static void computerMove() {
+        Random random = new Random();
+        int slot, row, col;
+
+        do {
+            slot = random.nextInt(9) + 1; // generates 1 to 9
+            row = getRowFromSlot(slot);
+            col = getColFromSlot(slot);
+        } while (!isValidMove(row, col)); // keep trying until valid
+
+        placeMove(row, col, computerSymbol);
+        System.out.println("Computer chose slot: " + slot);
     }
 }
