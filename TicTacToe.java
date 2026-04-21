@@ -1,6 +1,6 @@
 // TicTacToe
-// UC4 converts a user-entered slot number (1-9) into corresponding
-// row and column indices of a 2D array.
+// UC5 validates whether a move is inside the board boundaries
+// and whether the selected cell is empty.
 
 import java.util.Random;
 import java.util.Scanner;
@@ -8,7 +8,11 @@ import java.util.Scanner;
 public class TicTacToe {
 
     // UC1 variables
-    static char[][] board = new char[3][3];
+    static char[][] board = {
+        {'-', '-', '-'},
+        {'-', '-', '-'},
+        {'-', '-', '-'}
+    };
 
     // UC2 variables
     static boolean isHumanTurn;
@@ -19,8 +23,8 @@ public class TicTacToe {
     static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Entry point of the program. Demonstrates slot-to-index conversion
-     * using a sample slot value.
+     * Entry point of the program. Tests the validation logic
+     * using sample row and column values.
      */
     public static void main(String[] args) {
         initializeBoard();
@@ -29,14 +33,18 @@ public class TicTacToe {
         displayTossResult();
 
         int slot = getUserSlot();
+        int row = getRowFromSlot(slot);
+        int col = getColFromSlot(slot);
+
         System.out.println("Slot entered: " + slot);
-        System.out.println("Row: " + getRowFromSlot(slot));
-        System.out.println("Column: " + getColFromSlot(slot));
+        System.out.println("Row: " + row);
+        System.out.println("Column: " + col);
+        System.out.println("Is valid move: " + isValidMove(row, col));
     }
 
     /**
      * Initializes the 3x3 board by filling each cell with '-' to indicate
-     * an empty position. Students should focus on correct nested loop usage.
+     * an empty position.
      */
     static void initializeBoard() {
         for (int row = 0; row < 3; row++) {
@@ -64,7 +72,7 @@ public class TicTacToe {
 
     /**
      * Uses random logic to decide the first player and assigns symbols
-     * based on the toss outcome. This method initializes the game state.
+     * based on the toss outcome.
      */
     static void tossAndAssignSymbols() {
         Random random = new Random();
@@ -100,7 +108,6 @@ public class TicTacToe {
      * Reads an integer slot value from the user.
      * Input: Scanner object
      * Output: Slot number (1-9)
-     * Hint: Validation will be added in later use cases.
      */
     static int getUserSlot() {
         System.out.print("\nEnter slot number (1-9): ");
@@ -124,5 +131,24 @@ public class TicTacToe {
      */
     static int getColFromSlot(int slot) {
         return (slot - 1) % 3;
+    }
+
+    /**
+     * Checks if the given row and column are within bounds
+     * and if the target cell is empty.
+     * Input: Row, Column
+     * Output: true if valid, false otherwise.
+     */
+    static boolean isValidMove(int row, int col) {
+        if (row < 0 || row > 2) {
+            return false;
+        }
+        if (col < 0 || col > 2) {
+            return false;
+        }
+        if (board[row][col] != '-') {
+            return false;
+        }
+        return true;
     }
 }
