@@ -1,6 +1,6 @@
 // TicTacToe
-// UC8 controls the continuous game loop and alternates
-// turns until the game ends.
+// UC9 checks whether a player has won by examining
+// rows, columns, and diagonals.
 
 import java.util.Random;
 import java.util.Scanner;
@@ -26,8 +26,7 @@ public class TicTacToe {
     static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Entry point of the program. Demonstrates the structure
-     * of a continuous game loop.
+     * Entry point of the program. Tests the win-check logic.
      */
     public static void main(String[] args) {
         initializeBoard();
@@ -35,10 +34,8 @@ public class TicTacToe {
         tossAndAssignSymbols();
         displayTossResult();
 
-        // UC8: while loop - keep playing until game is over
         while (!gameOver) {
             if (isHumanTurn) {
-                // Human's turn
                 int slot = getUserSlot();
                 int row = getRowFromSlot(slot);
                 int col = getColFromSlot(slot);
@@ -47,33 +44,32 @@ public class TicTacToe {
                     placeMove(row, col, humanSymbol);
                     printBoard();
 
-                    if (checkWin(humanSymbol)) {
+                    if (hasWon(humanSymbol)) {
                         System.out.println("🎉 You win!");
                         gameOver = true;
                     } else if (checkDraw()) {
                         System.out.println("It's a draw!");
                         gameOver = true;
                     } else {
-                        isHumanTurn = false; // switch to computer
+                        isHumanTurn = false;
                     }
                 } else {
                     System.out.println("Invalid move! Try again.");
                 }
 
             } else {
-                // Computer's turn
                 System.out.println("\nComputer is making a move...");
                 computerMove();
                 printBoard();
 
-                if (checkWin(computerSymbol)) {
+                if (hasWon(computerSymbol)) {
                     System.out.println("Computer wins!");
                     gameOver = true;
                 } else if (checkDraw()) {
                     System.out.println("It's a draw!");
                     gameOver = true;
                 } else {
-                    isHumanTurn = true; // switch to human
+                    isHumanTurn = true;
                 }
             }
         }
@@ -195,23 +191,34 @@ public class TicTacToe {
     }
 
     /**
-     * Checks if the given symbol has won.
+     * Checks all possible winning patterns for the given symbol.
+     * Input: Player symbol
+     * Output: true if win detected.
      */
-    static boolean checkWin(char symbol) {
-        // Check rows
+    static boolean hasWon(char symbol) {
+        // Check all 3 rows
         for (int r = 0; r < 3; r++) {
-            if (board[r][0] == symbol && board[r][1] == symbol && board[r][2] == symbol)
+            if (board[r][0] == symbol &&
+                board[r][1] == symbol &&
+                board[r][2] == symbol)
                 return true;
         }
-        // Check columns
+        // Check all 3 columns
         for (int c = 0; c < 3; c++) {
-            if (board[0][c] == symbol && board[1][c] == symbol && board[2][c] == symbol)
+            if (board[0][c] == symbol &&
+                board[1][c] == symbol &&
+                board[2][c] == symbol)
                 return true;
         }
-        // Check diagonals
-        if (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol)
+        // Check top-left to bottom-right diagonal
+        if (board[0][0] == symbol &&
+            board[1][1] == symbol &&
+            board[2][2] == symbol)
             return true;
-        if (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)
+        // Check top-right to bottom-left diagonal
+        if (board[0][2] == symbol &&
+            board[1][1] == symbol &&
+            board[2][0] == symbol)
             return true;
 
         return false;
