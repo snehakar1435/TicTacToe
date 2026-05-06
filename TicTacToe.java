@@ -1,6 +1,6 @@
 // TicTacToe
-// UC9 checks whether a player has won by examining
-// rows, columns, and diagonals.
+// UC10 checks whether the game has ended in a draw
+// by ensuring no empty cells remain on the board.
 
 import java.util.Random;
 import java.util.Scanner;
@@ -26,7 +26,7 @@ public class TicTacToe {
     static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Entry point of the program. Tests the win-check logic.
+     * Entry point of the program. Tests draw detection logic.
      */
     public static void main(String[] args) {
         initializeBoard();
@@ -45,9 +45,9 @@ public class TicTacToe {
                     printBoard();
 
                     if (hasWon(humanSymbol)) {
-                        System.out.println("🎉 You win!");
+                        System.out.println("You win!");
                         gameOver = true;
-                    } else if (checkDraw()) {
+                    } else if (isDraw()) {
                         System.out.println("It's a draw!");
                         gameOver = true;
                     } else {
@@ -65,7 +65,7 @@ public class TicTacToe {
                 if (hasWon(computerSymbol)) {
                     System.out.println("Computer wins!");
                     gameOver = true;
-                } else if (checkDraw()) {
+                } else if (isDraw()) {
                     System.out.println("It's a draw!");
                     gameOver = true;
                 } else {
@@ -196,26 +196,25 @@ public class TicTacToe {
      * Output: true if win detected.
      */
     static boolean hasWon(char symbol) {
-        // Check all 3 rows
+        // Check rows
         for (int r = 0; r < 3; r++) {
             if (board[r][0] == symbol &&
                 board[r][1] == symbol &&
                 board[r][2] == symbol)
                 return true;
         }
-        // Check all 3 columns
+        // Check columns
         for (int c = 0; c < 3; c++) {
             if (board[0][c] == symbol &&
                 board[1][c] == symbol &&
                 board[2][c] == symbol)
                 return true;
         }
-        // Check top-left to bottom-right diagonal
+        // Check diagonals
         if (board[0][0] == symbol &&
             board[1][1] == symbol &&
             board[2][2] == symbol)
             return true;
-        // Check top-right to bottom-left diagonal
         if (board[0][2] == symbol &&
             board[1][1] == symbol &&
             board[2][0] == symbol)
@@ -225,12 +224,14 @@ public class TicTacToe {
     }
 
     /**
-     * Checks if the game is a draw (no empty cells left).
+     * Traverses the board to check for any remaining empty cells.
+     * Output: true if draw, false otherwise.
      */
-    static boolean checkDraw() {
+    static boolean isDraw() {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
-                if (board[r][c] == '-') return false;
+                if (board[r][c] == '-')
+                    return false;
             }
         }
         return true;
